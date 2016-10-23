@@ -1,0 +1,60 @@
+<html>
+  <head>
+    <title>View User Posts </title>
+
+    <style></style>
+  </head>
+<body>
+<h1>View user posts</h1>
+
+<form id="viewUserPosts" action="../php/ViewUserPosts.php" method="post">
+<?php 
+
+$mysqli = new mysqli("mysql.eecs.ku.edu", "khrenchir", "ilovecats", "khrenchir");
+
+/* check connection */
+if ($mysqli->connect_errno) {
+    printf("Connect failed: %s\n", $mysqli->connect_error);
+	echo "connection failed";
+    exit();
+}
+
+
+$users = array();
+$query = "SELECT user_id FROM Users";
+$length = 0;
+if ($result = $mysqli->query($query)) {
+
+    /* fetch associative array */
+    while ($row = $result->fetch_assoc()) {
+		$users[$length] = $row["user_id"];
+		$length++;
+    }
+
+    /* free result set */
+    $result->free();
+} 
+
+
+$arrlength = count($users);
+echo "<select name=\"poster\">";
+for($x = 0; $x < $arrlength; $x++) {
+	echo "<option value= \"".$users[$x]."\"> ";
+    echo $users[$x];
+	echo "</options>";
+}
+echo "</select>";
+
+/* close connection */
+$mysqli->close();
+
+
+?>
+
+<input type="submit" value="View Posts from this User">
+
+</form>
+
+
+</body>
+</html>
